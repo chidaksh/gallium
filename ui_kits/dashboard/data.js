@@ -1,0 +1,98 @@
+// Mock data mirroring results/full_eval.json shape
+
+window.DATA = {
+  variants: {
+    A: { id: 'A', name: 'ROI-Led', full: 'Variant A — ROI-led, analytical',
+         hook: '"3 recurring syncs. 30 minutes each. 8 people on every call."',
+         color: '#4361ee', colorInk: '#1e3a8a', colorSoft: '#e0e7ff',
+         mean: 6.32, ci: [6.15, 6.50] },
+    B: { id: 'B', name: 'Story-Driven', full: 'Variant B — Story-driven, tension-first',
+         hook: '"Our last \u0022quick sync\u0022 took 47 minutes."',
+         color: '#f72585', colorInk: '#9d174d', colorSoft: '#fce7f3',
+         mean: 5.10, ci: [4.92, 5.30] },
+    C: { id: 'C', name: 'Social Proof', full: 'Variant C — Social proof-led, peer-validation',
+         hook: '"Linear, Vercel, Lattice — all made the same change last year."',
+         color: '#06d6a0', colorInk: '#065f46', colorSoft: '#d1fae5',
+         mean: 7.15, ci: [6.99, 7.32] },
+  },
+  personas: [
+    { id: 'alex',   name: 'Alex',   title: 'VP Engineering',  weight: 30, profile: 'ROI-focused, high skepticism',   accent: '#6366f1' },
+    { id: 'jordan', name: 'Jordan', title: 'Head of Remote',  weight: 25, profile: 'Trust-focused, peer-driven',     accent: '#ec4899' },
+    { id: 'sam',    name: 'Sam',    title: 'Founder / CEO',   weight: 20, profile: 'Identity-driven, early-stage',   accent: '#f59e0b' },
+    { id: 'taylor', name: 'Taylor', title: 'Senior Engineer', weight: 25, profile: 'Pain-driven, tool influencer',   accent: '#10b981' },
+  ],
+  // persona × variant scores (0-10)
+  scores: {
+    alex:   { A: 7.2, B: 4.8, C: 7.0 },
+    jordan: { A: 7.8, B: 6.4, C: 7.8 },
+    sam:    { A: 4.8, B: 5.0, C: 7.0 },
+    taylor: { A: 5.6, B: 4.4, C: 6.8 },
+  },
+  // element attribution (-100 to +100)
+  attribution: {
+    A: [
+      { id: 'A_E1_hook',     label: 'Opening math hook',      score:  +80 },
+      { id: 'A_E2_evidence', label: '720-hour pain data',     score:  +70 },
+      { id: 'A_E3_outcomes', label: 'Before/after bullets',   score:  +40 },
+      { id: 'A_E4_proof',    label: '"9 hrs reclaimed" claim',score:  +30 },
+      { id: 'A_E5_cta',      label: 'Free trial CTA',         score:  -10 },
+      { id: 'A_E6_hashtags', label: 'Hashtags',               score:    0 },
+    ],
+    B: [
+      { id: 'B_E1_hook',      label: '"47-minute sync" opener', score: +90 },
+      { id: 'B_E2_scenario',  label: 'Meeting spiral story',     score: +60 },
+      { id: 'B_E3_pivot',     label: '"Should\'ve been 90s video"', score: +30 },
+      { id: 'B_E4_mechanism', label: 'Async workflow pitch',    score: +20 },
+      { id: 'B_E5_social_proof', label: '"14,000 teams" stat',  score: -50 },
+      { id: 'B_E6_cta',       label: 'Link in comments',        score: +10 },
+    ],
+    C: [
+      { id: 'C_E1_hook',      label: 'Named peer companies',          score: +85 },
+      { id: 'C_E2_reveal',    label: '"Stopped defaulting to syncs"', score: +70 },
+      { id: 'C_E3_pattern',   label: '90s video replaces 30m sync',   score: +60 },
+      { id: 'C_E4_testimony', label: '11→4 syncs personal proof',     score: +75 },
+      { id: 'C_E5_reframe',   label: '"What replaces meetings?"',     score: +50 },
+      { id: 'C_E6_cta',       label: 'Link in comments',              score: +15 },
+      { id: 'C_E7_hashtags',  label: 'Hashtags',                      score:   0 },
+    ],
+  },
+  minimalPairs: {
+    skepticism: {
+      title: 'Skeptical vs. trusting audience',
+      explain: "Same person, same ad — but one version is highly skeptical of marketing claims, the other is open. What breaks?",
+      low: 'Trusting', high: 'Skeptical',
+      actionLow: 6.8, actionHigh: 3.2,
+      biggestElement: '"14,000 teams" stat',
+      biggestDelta: -160,
+      elements: [
+        { label: '"47-minute sync" opener', low: +85, high: +80 },
+        { label: 'Meeting spiral story',    low: +55, high: +50 },
+        { label: '"Should\'ve been 90s video"', low: +40, high: +20 },
+        { label: 'Async workflow pitch',    low: +25, high: +10 },
+        { label: '"14,000 teams" stat',     low: +60, high: -100 },
+        { label: 'Link in comments',        low: +15, high:  +5 },
+      ],
+      insight: 'When skepticism goes up, the "14,000 teams" stat flips from +60 to −100 — a 160-point swing. The hook and story are skepticism-proof. The social proof claim is not.',
+    },
+    pain: {
+      title: 'Aware vs. unaware of the problem',
+      explain: "Same person, same ad — but one version acutely feels the meeting-overload pain, the other hasn't noticed yet. What changes?",
+      low: 'Unaware', high: 'Aware',
+      actionLow: 4.1, actionHigh: 7.3,
+      biggestElement: '"Should\'ve been 90s video"',
+      biggestDelta: +65,
+      elements: [
+        { label: '"47-minute sync" opener',     low: +70, high: +90 },
+        { label: 'Meeting spiral story',        low: +40, high: +70 },
+        { label: '"Should\'ve been 90s video"', low:  +5, high: +70 },
+        { label: 'Async workflow pitch',        low:  +5, high: +45 },
+        { label: '"14,000 teams" stat',         low: -20, high: +10 },
+        { label: 'Link in comments',            low:   0, high: +20 },
+      ],
+      insight: 'The story hook works whether or not the reader feels the pain. But the product pitch only converts when the reader has actively experienced meeting overload — otherwise it reads as someone else\'s problem.',
+    },
+  },
+  cost: { total: 0.04, calls: 80, cacheHit: 0.72 },
+  runs: 5,
+  effect: { cohensD: 0.90, label: 'Large' },
+};
