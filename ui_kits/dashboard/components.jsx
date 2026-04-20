@@ -19,7 +19,7 @@ function Header() {
       <div style={hdr.right}>
         <div style={hdr.pill}>
           <span style={{...hdr.dot, background:'#06d6a0'}} />
-          <span>Run complete · 5 iterations · $0.04</span>
+          <span>Run complete · {window.DATA.runs} iterations · ${window.DATA.cost.total.toFixed(2)}</span>
         </div>
         <button style={hdr.btn}>New evaluation</button>
       </div>
@@ -129,7 +129,7 @@ function Hero({ data }) {
         <div className="ds-eyebrow" style={{color:'var(--fg-3)', marginBottom:10}}>Relay LinkedIn campaign · pre-flight</div>
         <h1 style={hero.h}>
           Variant <span style={{color:w.color}}>{w.id}</span> wins —
-          <span style={hero.hSub}> but only if you target Jordan or Sam.</span>
+          <span style={hero.hSub}> and it works across every audience segment.</span>
         </h1>
         <p style={hero.p}>
           Social proof-led copy scores <span style={hero.num}>{w.mean.toFixed(1)} / 10</span> across
@@ -265,10 +265,11 @@ function Heatmap({ data, activePersona, onPersonaClick }) {
         })}
       </div>
       <div style={hm.insight}>
-        <strong>Key insight.</strong> No single variant wins every audience. Sam (Founder) scores Variant A at just
+        <strong>Key insight.</strong> No single variant wins every audience. Sam (Founder/CEO) scores Variant A at just
         <span style={hm.num}> 4.8</span> but gives Variant C a
         <span style={hm.num}> 7.0</span> — early-stage founders need peer validation before they consider a tool.
-        Jordan responds equally well to ROI data and social proof (both 7.8).
+        Jordan responds equally well to ROI data and social proof (both <span style={hm.num}>7.8</span>).
+        Taylor prefers C (<span style={hm.num}>6.8</span>) over A (<span style={hm.num}>5.2</span>) — tool influencers want social signals, not spreadsheets.
       </div>
     </section>
   );

@@ -55,9 +55,9 @@ function Attribution({ data }) {
       </div>
       <div style={at.warning}>
         <strong>Variant B's weak spot.</strong> The <span style={at.code}>"14,000 teams"</span> social proof stat scores
-        <span style={{...at.num, color:'#dc2626'}}> −50</span> — 65% of personas flagged it as untrustworthy.
-        Alex and Taylor (both high-skepticism) reject it outright. This single line is why B finishes last,
-        despite having the strongest opening hook in the entire evaluation.
+        <span style={{...at.num, color:'#dc2626'}}> −50</span> — the only negative-scoring element across all three variants.
+        Alex and Taylor (both high-skepticism) reject it outright. B has the strongest opening hook
+        in the entire evaluation, but this one line drags the whole variant down.
       </div>
     </section>
   );
@@ -191,9 +191,9 @@ const mp2 = {
 function Recommendations({ data }) {
   const { variants } = data;
   const recs = [
-    { v: 'C', title: 'Ship Variant C', body: "Wins 3 of 4 personas, ties the 4th. Peer-validation (Linear, Vercel, Lattice) builds trust without triggering skepticism. Works across all audience segments.", action: 'Recommended' },
-    { v: 'B', title: "Fix Variant B's proof point", body: 'B has the strongest opening in the evaluation, but the "14,000 teams" stat is actively hurting it. Replace with named case studies — Alex and Taylor want specifics, not aggregates.', action: 'Revise' },
-    { v: 'A', title: 'Use Variant A for ROI buyers', body: 'The math hook forces readers to verify the arithmetic — highly effective on analytical audiences. Consider A for targeted campaigns to VP/Director segments.', action: 'Segment' },
+    { v: 'C', title: 'Ship Variant C', body: "Wins 3 of 4 personas and ties Jordan with A. Peer-validation (Linear, Vercel, Lattice) builds trust without triggering skepticism. Scores 7.15 \u2014 the only variant above 7.", action: 'Recommended' },
+    { v: 'B', title: "Fix B's proof point", body: 'B has the strongest opening in the evaluation (+100 across hook, story, pivot), but the \u201c14,000 teams\u201d stat scores \u221250. Replace with named case studies \u2014 skeptics want specifics, not aggregates.', action: 'Revise' },
+    { v: 'A', title: 'Use A for ROI buyers', body: 'The math hook (+95) forces readers to verify the arithmetic \u2014 highly effective on analytical audiences like Alex (6.8). Consider A for targeted campaigns to VP/Director segments.', action: 'Segment' },
   ];
   return (
     <section style={rc.root}>
@@ -229,36 +229,45 @@ const rc = {
 };
 
 // ───────── Diagnostics ─────────
-function Diagnostics() {
+function Diagnostics({ data }) {
   const [open, setOpen] = useState(false);
+  const dx = data ? data.diagnostics : {};
+  const sc = dx.selfConsistency || {};
+  const pd = dx.personaDiff || {};
+  const pb = dx.positionBias || {};
+  const cc = dx.closecall || {};
   return (
     <section style={dg.root}>
       <button onClick={() => setOpen(!open)} style={dg.toggle}>
-        <span style={dg.caret}>{open ? '▾' : '▸'}</span>
-        <span style={dg.toggleT}>Under the hood — diagnostics for the ML team</span>
-        <span style={dg.toggleS}>Krippendorff's α · position bias · persona collapse</span>
+        <span style={dg.caret}>{open ? '\u25BE' : '\u25B8'}</span>
+        <span style={dg.toggleT}>{'Under the hood \u2014 diagnostics for the ML team'}</span>
+        <span style={dg.toggleS}>{"Krippendorff\u2019s \u03B1 \u00B7 position bias \u00B7 persona collapse"}</span>
       </button>
       {open && (
         <div style={dg.body}>
           <div style={dg.stat}>
             <div style={dg.statL}>LLM self-consistency</div>
-            <div style={dg.statV}>0.87</div>
-            <div style={dg.statSub}>Krippendorff's α · ordinal</div>
+            <div style={dg.statV}>{(sc.mean || 0).toFixed(2)}</div>
+            <div style={dg.statSub}>{sc.label || ''}</div>
           </div>
           <div style={dg.stat}>
             <div style={dg.statL}>Persona differentiation</div>
-            <div style={dg.statV}>0.62</div>
-            <div style={dg.statSub}>mean between-persona variance</div>
+            <div style={{...dg.statV, color: (pd.mean || 0) < 0.5 ? '#dc2626' : 'var(--fg-1)'}}>
+              {(pd.mean || 0).toFixed(2)}
+            </div>
+            <div style={dg.statSub}>{pd.label || ''} · {pd.collapsed || ''} collapsed</div>
           </div>
           <div style={dg.stat}>
             <div style={dg.statL}>Position bias</div>
-            <div style={dg.statV}>—</div>
-            <div style={dg.statSub}>no elements flagged (ρ &lt; 0.3)</div>
+            <div style={{...dg.statV, color: (pb.flagged || 0) > 0 ? '#f59e0b' : 'var(--fg-1)'}}>
+              {(pb.flagged || 0) === 0 ? '\u2014' : `${pb.flagged} flagged`}
+            </div>
+            <div style={dg.statSub}>{(pb.flagged || 0) === 0 ? 'no elements flagged (\u03c1 < 0.3)' : pb.detail}</div>
           </div>
           <div style={dg.stat}>
             <div style={dg.statL}>Close-call detection</div>
-            <div style={dg.statV}>False</div>
-            <div style={dg.statSub}>MDE = 0.5, Kohavi et al. 2020</div>
+            <div style={dg.statV}>{cc.value ? 'Yes' : 'No'}</div>
+            <div style={dg.statSub}>{cc.label || ''}</div>
           </div>
         </div>
       )}

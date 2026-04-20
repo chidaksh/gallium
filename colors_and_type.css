@@ -1,0 +1,41 @@
+:root {
+  /* Background */
+  --bg-1: #ffffff;
+  --bg-2: #f8fafc;
+  --bg-3: #f1f5f9;
+
+  /* Foreground */
+  --fg-1: #0f172a;
+  --fg-2: #475569;
+  --fg-3: #94a3b8;
+  --fg-muted: #cbd5e1;
+
+  /* Borders */
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  /* Ink (misc) */
+  --ink-200: #cbd5e1;
+
+  /* Fonts */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ds-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-3);
+}
